@@ -253,6 +253,7 @@ void display()
   glPushMatrix();
     glTranslated(17, -12, 0);
     glScalef(1, 1, 1);
+    glRotatef(180, 0, 0, 1);
     drawFish();
   glPopMatrix();
 
@@ -260,6 +261,7 @@ void display()
   glPushMatrix();
     glTranslated(15, -17, 0);
     glScalef(1, 1, 1);
+    glRotatef(180, 0, 0, 1);
     drawFish();
   glPopMatrix();
 
@@ -267,6 +269,11 @@ void display()
   glPushMatrix();
     glTranslated(pinguinPositionX, pinguinPositionY, 0);
     glScalef(0.8, 0.8, 1);
+    if (pinguinPositionX >= 0) {
+      glRotatef(270, 0, 0, 1);
+    }else {
+      glRotatef(0, 0, 0, 1);
+    }
     drawPenguin();
   glPopMatrix();
 
