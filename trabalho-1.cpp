@@ -106,9 +106,6 @@ void drawWater(){
 
 void drawPenguin(){
 
-  
-  
-
   // desenha pata de trás
   glPushMatrix();
     glColor3f(1, 0, 0);
@@ -118,7 +115,6 @@ void drawPenguin(){
   glPopMatrix();
 
   // desenha pata da frente
-
   glPushMatrix();
     glColor3f(1, 0, 0);
     glTranslatef(0.5, 0, 1);
@@ -133,7 +129,6 @@ void drawPenguin(){
     glTranslatef(0, 1.5, 0);
     drawElipse(0.5, 1);
   glPopMatrix();
-
 
   // desenha barriga
   glPushMatrix();
@@ -169,31 +164,53 @@ void drawPenguin(){
   glPopMatrix();
 }
 
+void drawFish() {
+
+  // desenha rabo
+  glPushMatrix();
+    glColor3f(0, 0, 0);
+    glTranslatef(-2, 0, 1);
+    glScalef(1, 0.5, 1);
+    glRotatef(270, 0, 0, 1);
+    drawTriangle();
+  glPopMatrix();
+
+  // desenha corpo
+  glPushMatrix();
+    glColor3f(0, 0, 0);
+    glScalef(1, 1, 1);
+    glTranslatef(0, 0, 0);
+    drawElipse(1, 0.5);
+  glPopMatrix();
+}
+
+
+bool isPinguinInWater(){
+  return pinguinPositionX >= 0 && pinguinPositionY < -COORDINATES_X / 2;
+}
 // void keyboard(unsigned char key, int x, int y) // para teclas normais
 void keyboard(int key, int x, int y) // para teclas especiais
 {
   switch (key)
   {
-  case GLUT_KEY_LEFT:
-    if (pinguinPositionX >= 0){
-
-    }
-    if ((pinguinPositionY >= -COORDINATES_Y / 2) && (pinguinPositionX >= 0)){
-      pinguinPositionX -= deltaX;
-    }
+    case GLUT_KEY_LEFT:
+      if ((isPinguinInWater() && pinguinPositionX > 0) ||
+          (!isPinguinInWater() && pinguinPositionX > -COORDINATES_X)) {
+        pinguinPositionX -= deltaX;
+      }
     break;
   case GLUT_KEY_RIGHT:
-    if (pinguinPositionX <= COORDINATES_X){
+    if (pinguinPositionX < COORDINATES_X){
       pinguinPositionX += deltaX;
     }
     break;
   case GLUT_KEY_DOWN:
-    if (pinguinPositionX >= 0 && pinguinPositionY > -COORDINATES_Y){
+    if (pinguinPositionX > 0 && pinguinPositionY > -COORDINATES_Y){
       pinguinPositionY -= deltaY;
     }
     break;
   case GLUT_KEY_UP:
-    if (pinguinPositionX >= 0 && pinguinPositionY < -COORDINATES_Y / 2){
+    if (isPinguinInWater()) {
       pinguinPositionY += deltaY;
     }
     break;
@@ -218,10 +235,45 @@ void display()
   // desenha a água
   drawWater();
 
+  // desenha peixe 1
+  glPushMatrix();
+    glTranslated(4, -12, 0);
+    glScalef(1, 1, 1);
+    drawFish();
+  glPopMatrix();
+
+    // desenha peixe 2
+  glPushMatrix();
+    glTranslated(6, -18, 0);
+    glScalef(1, 1, 1);
+    drawFish();
+  glPopMatrix();
+
+    // desenha peixe 3
+  glPushMatrix();
+    glTranslated(17, -12, 0);
+    glScalef(1, 1, 1);
+    drawFish();
+  glPopMatrix();
+
+  // desenha peixe 4
+  glPushMatrix();
+    glTranslated(15, -17, 0);
+    glScalef(1, 1, 1);
+    drawFish();
+  glPopMatrix();
+
   // desenha pinguin
   glPushMatrix();
     glTranslated(pinguinPositionX, pinguinPositionY, 0);
     glScalef(0.8, 0.8, 1);
+    drawPenguin();
+  glPopMatrix();
+
+  // desenha pinguin filhote
+  glPushMatrix();
+    glTranslated(-18, -COORDINATES_Y / 2, 0);
+    glScalef(1, 0.5, 1);
     drawPenguin();
   glPopMatrix();
 
