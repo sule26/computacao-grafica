@@ -11,9 +11,12 @@ const int COORDINATES_Z = 20;
 float angle = 0.0f; // angulo de rotação do moinho
 float pinguinPositionX = -12.0f;
 float pinguinPositionY = -COORDINATES_Y / 2;
+float pinguinScaleX = 0.8f;
+float pinguinScaleY = 0.8f;
 float deltaX = 0.5f;
 float deltaY = 0.5f;
-bool isFacingRight = true;
+bool isGoingRight = true;
+bool isGoingDown = true;
 
 void init(void);
 void display(void);
@@ -199,22 +202,24 @@ void keyboard(int key, int x, int y) // para teclas especiais
           (!isPinguinInWater() && pinguinPositionX > -COORDINATES_X)) {
         pinguinPositionX -= deltaX;
       }
-      isFacingRight = false;
+      isGoingRight = false;
     break;
   case GLUT_KEY_RIGHT:
     if (pinguinPositionX < COORDINATES_X){
       pinguinPositionX += deltaX;
     }
-    isFacingRight = true;
+    isGoingRight = true;
     break;
   case GLUT_KEY_DOWN:
     if (pinguinPositionX > 0 && pinguinPositionY > -COORDINATES_Y){
       pinguinPositionY -= deltaY;
+      isGoingDown = true;
     }
     break;
   case GLUT_KEY_UP:
     if (isPinguinInWater()) {
       pinguinPositionY += deltaY;
+      isGoingDown = false;
     }
     break;
   default:
@@ -271,16 +276,23 @@ void display()
   // desenha pinguin
   glPushMatrix();
     glTranslated(pinguinPositionX, pinguinPositionY, 0);
-    if (isFacingRight){
-      glScalef(0.8, 0.8, 1);
-    } else {
-      glScalef(-0.8, 0.8, 1);
-    }
     if (pinguinPositionX >= 0) {
-      glRotatef(270, 0, 0, 1);
-    }else {
-      glRotatef(0, 0, 0, 1);
+        glRotatef(270, 0, 0, 1);  // Deita o pinguim: eixo X vira vertical, Y vira horizontal
+
+        // Agora:
+        // - scaleX => bico (cima/baixo)
+        // - scaleY => direção do corpo (direita/esquerda)
+        pinguinScaleX = isGoingDown ? 0.8 : -0.8;    // bico para baixo ou para cima
+        pinguinScaleY = isGoingRight ? 0.8 : -0.8;   // corpo para direita ou esquerda
+
+        glScalef(pinguinScaleX, pinguinScaleY, 1);
+
+    // FORA DA ÁGUA (em pé)
+    } else {
+        pinguinScaleX = isGoingRight ? 0.8 : -0.8;   // Olhar pra direita ou esquerda
+        glScalef(pinguinScaleX, pinguinScaleY, 1);
     }
+
     drawPenguin();
   glPopMatrix();
 
