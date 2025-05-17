@@ -173,7 +173,7 @@ void drawFish() {
   // desenha rabo
   glPushMatrix();
     glColor3f(0, 0, 0);
-    glTranslatef(-2, 0, 1);
+    glTranslatef(-1.5, 0, 1);
     glRotatef(270, 0, 0, 1);
     glScalef(1, 0.5, 1);
     drawTriangle();
@@ -188,6 +188,42 @@ void drawFish() {
   glPopMatrix();
 }
 
+void drawEnemy(){
+
+  // Corpo
+  glPushMatrix();
+    glColor3f(0.3f, 0.3f, 0.8f);
+    glTranslatef(0, 0, 0);
+    glScalef(2, 1.5, 1);
+    drawElipse(1, 1);
+  glPopMatrix();
+
+  // Asa
+  glPushMatrix();
+    glColor3f(0.4f, 0.4f, 0.8f);
+    glTranslatef(-1, 1, 0);
+    glRotatef(-40, 0, 0, 1);
+    glScalef(2, 1, 1);
+    drawTriangle();
+  glPopMatrix();
+
+  // olho
+  glPushMatrix();
+    glColor3f(1, 1, 1);
+    glTranslatef(1.4, 0.3, 0);
+    glScalef(1, 1, 1);
+    drawDisk(0.3);
+  glPopMatrix();
+
+  // bico
+  glPushMatrix();
+    glColor3f(0.8, 0.8, 0);
+    glTranslatef(2.3, 0, 0);
+    glRotatef(50, 0, 0, 1);
+    glScalef(0.6, 0.6, 1);
+    drawTriangle();
+  glPopMatrix();
+}
 
 bool isPinguinInWater(){
   return pinguinPositionX >= 0 && pinguinPositionY < -COORDINATES_X / 2;
@@ -301,6 +337,13 @@ void display()
     glTranslated(-18, -COORDINATES_Y / 2, 0);
     glScalef(1, 0.5, 1);
     drawPenguin();
+  glPopMatrix();
+
+  // desenha inimigo
+  glPushMatrix();
+    glTranslated(0, 10, 0);
+    glScalef(1, 1, 1);
+    drawEnemy();
   glPopMatrix();
 
   // Libera o buffer de comando de desenho para fazer o desenho acontecer o mais rápido possível.
