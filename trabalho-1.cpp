@@ -13,6 +13,7 @@ float pinguinPositionX = -12.0f;
 float pinguinPositionY = -COORDINATES_Y / 2;
 float deltaX = 0.5f;
 float deltaY = 0.5f;
+bool isFacingRight = true;
 
 void init(void);
 void display(void);
@@ -125,16 +126,16 @@ void drawPenguin(){
   // desenha corpo
   glPushMatrix();
     glColor3f(0, 0, 0);
+    glTranslatef(0, 3.7, 0);
     glScalef(2, 2.5, 1);
-    glTranslatef(0, 1.5, 0);
     drawElipse(0.5, 1);
   glPopMatrix();
 
   // desenha barriga
   glPushMatrix();
     glColor3f(1, 1, 1);
+    glTranslatef(0.5, 3.7, 1);
     glScalef(1, 1.5, 1);
-    glTranslatef(0.5, 2.5, 1);
     drawElipse(0.3, 1);
   glPopMatrix();
 
@@ -158,8 +159,8 @@ void drawPenguin(){
   glPushMatrix();
     glColor3f(0.8, 0.8, 0);
     glTranslatef(1, 6.5, 1);
-    glScalef(0.6, 0.6, 1);
     glRotatef(20, 0, 0, 1);
+    glScalef(0.6, 0.6, 1);
     drawTriangle();
   glPopMatrix();
 }
@@ -170,16 +171,16 @@ void drawFish() {
   glPushMatrix();
     glColor3f(0, 0, 0);
     glTranslatef(-2, 0, 1);
-    glScalef(1, 0.5, 1);
     glRotatef(270, 0, 0, 1);
+    glScalef(1, 0.5, 1);
     drawTriangle();
   glPopMatrix();
 
   // desenha corpo
   glPushMatrix();
     glColor3f(0, 0, 0);
-    glScalef(1, 1, 1);
     glTranslatef(0, 0, 0);
+    glScalef(1, 1, 1);
     drawElipse(1, 0.5);
   glPopMatrix();
 }
@@ -198,11 +199,13 @@ void keyboard(int key, int x, int y) // para teclas especiais
           (!isPinguinInWater() && pinguinPositionX > -COORDINATES_X)) {
         pinguinPositionX -= deltaX;
       }
+      isFacingRight = false;
     break;
   case GLUT_KEY_RIGHT:
     if (pinguinPositionX < COORDINATES_X){
       pinguinPositionX += deltaX;
     }
+    isFacingRight = true;
     break;
   case GLUT_KEY_DOWN:
     if (pinguinPositionX > 0 && pinguinPositionY > -COORDINATES_Y){
@@ -260,15 +263,19 @@ void display()
   // desenha peixe 4
   glPushMatrix();
     glTranslated(15, -17, 0);
-    glScalef(1, 1, 1);
     glRotatef(180, 0, 0, 1);
+    glScalef(1, 1, 1);
     drawFish();
   glPopMatrix();
 
   // desenha pinguin
   glPushMatrix();
     glTranslated(pinguinPositionX, pinguinPositionY, 0);
-    glScalef(0.8, 0.8, 1);
+    if (isFacingRight){
+      glScalef(0.8, 0.8, 1);
+    } else {
+      glScalef(-0.8, 0.8, 1);
+    }
     if (pinguinPositionX >= 0) {
       glRotatef(270, 0, 0, 1);
     }else {
